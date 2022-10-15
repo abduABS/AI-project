@@ -111,7 +111,7 @@ def uniformCostSearch(problem: SearchProblem):
                 coords = s[0]
                 if coords not in explored:
                     dir = s[1]
-                    Cost = moves + [directions]
+                    Cost = moves + [dir]
                     state_space.push((coords, moves + [dir]), problem.getCostOfActions(Cost))
         explored.append(state)
     return moves
