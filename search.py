@@ -87,6 +87,26 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+
+    startstate = problem.getStartState()
+    stateSpace = util.Stack()
+    stateSpace.push((startstate, []))
+    expList = []
+
+    while not stateSpace.isEmpty():
+        currState, path = stateSpace.pop()
+        if problem.isGoalState(currState):
+            return path
+        expList.append(currState)
+        nextSteps = problem.getSuccessors(currState)
+
+        for next in nextSteps:
+            newCoord = next[0]
+            if newCoord not in expList:
+                newPath = path + [next[1]]
+                stateSpace.push((newCoord, newPath))
+
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem):
@@ -97,6 +117,24 @@ def breadthFirstSearch(problem: SearchProblem):
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    initial = problem.getStartState()
+    state_space = util.PriorityQueue()
+    state_space.push((initial, []), 0)
+    explored = []
+    while not state_space.isEmpty():
+        state, moves = state_space.pop()
+        if problem.isGoalState(state):
+            return moves
+        if state not in explored:
+            success = problem.getSuccessors(state)
+            for s in success:
+                coords = s[0]
+                if coords not in explored:
+                    dir = s[1]
+                    Cost = moves + [dir]
+                    state_space.push((coords, moves + [dir]), problem.getCostOfActions(Cost))
+        explored.append(state)
+    return moves
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
