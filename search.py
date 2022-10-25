@@ -129,7 +129,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     initial = problem.getStartState()
     state_space = util.PriorityQueue()
-    state_space.push((initial, []), heuristic(initial, problem))
+    state_space.push((initial, []), 0)
     explored = []
     while not state_space.isEmpty():
         state, moves = state_space.pop()
@@ -142,8 +142,8 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
                 if coords not in explored:
                     direction = s[1]
                     cost = moves + [direction]
-                    state_space.push((coords, moves + [direction]), problem.getCostOfActions(cost) + heuristic(state, problem))
-        explored.append(state)
+                    state_space.push((coords, moves + [direction]), problem.getCostOfActions(cost) + heuristic(coords, problem))
+            explored.append(state)
     return moves
     util.raiseNotDefined()
 
