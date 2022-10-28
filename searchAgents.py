@@ -466,7 +466,6 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
         return abs(position[0] - l[0]) + abs(position[1] - l[1])
     cost = 0
     ACost = []
-    ncost=0
     newCost = []
     f = food[0]
     lCost = 0
