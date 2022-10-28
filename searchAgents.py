@@ -449,7 +449,7 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     problem.  For example, problem.walls gives you a Grid of where the walls
     are.
 
-    If you want to *store* information to be reused in other calls to the
+    If you want to *store* information to be reused in other calls to theAcost
     heuristic, there is a dictionary called problem.heuristicInfo that you can
     use. For example, if you only want to count the walls once and store that
     value, try: problem.heuristicInfo['wallCount'] = problem.walls.count()
@@ -458,7 +458,31 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    food = foodGrid.asList()
+    if not food:
+        return 0
+    l = food[0]
+    if len(food) == 1:
+        return abs(position[0] - l[0]) + abs(position[1] - l[1])
+    cost = 0
+    ACost = []
+    newCost = []
+    f = food[0]
+    lCost = 0
+    for point in food:
+        cost = abs(position[0] - point[0]) + abs(position[1] - point[1])
+        ACost.append(cost)
+        lCost = min(ACost)
+    mini = ACost.index(lCost)
+    l = food[mini]
+    for point in food:
+        cost = abs(l[0] - point[0]) + abs(l[1] - point[1])
+        newCost.append(cost)
+        lCost = max(newCost)
+    maxi = newCost.index(lCost)
+    f = food[maxi]
+    return abs(l[0] - f[0]) + abs(l[1] - f[1]) + abs(position[0] - l[0]) + abs(position[1] - l[1])
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -489,6 +513,9 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        #return search.uniformCostSearch(problem)
+        #return search.breadthFirstSearch(problem)
+        return search.aStarSearch(problem)
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -525,6 +552,11 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
+        food=self.food
+        if(food[x][y] == True):
+            return True
+        else:
+            return False
         util.raiseNotDefined()
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:
