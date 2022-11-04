@@ -114,7 +114,7 @@ class SearchAgent(Agent):
         if self.searchFunction == None: raise Exception("No search function provided for SearchAgent")
         starttime = time.time()
         problem = self.searchType(state) # Makes a new search problem
-        self.actions  = self.searchFunction(problem) # Find a path
+        self.actions = self.searchFunction(problem) # Find a path
         if self.actions == None:
             self.actions = []
         totalCost = problem.getCostOfActions(self.actions)
@@ -277,7 +277,7 @@ class CornersProblem(search.SearchProblem):
     You must select a suitable state space and successor function
     """
 
-    def __init__(self, startingGameState: pacman.GameState):
+    def __init__(self, startingGameState):
         """
         Stores the walls, pacman's starting position and corners.
         """
@@ -292,23 +292,24 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-        
+        self.startstate = (self.startingPosition, self.corners) #(position, (corner1, corner2, corner3))
+
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startstate
 
-    def isGoalState(self, state: Any):
+    def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return len(state[1]) == 0
 
-    def getSuccessors(self, state: Any):
+    def getSuccessors(self, state):
         """
         Returns successor states, the actions they require, and a cost of 1.
 
@@ -329,7 +330,16 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
-
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            if not hitsWall:
+                cornersState = []
+                for i in state[1]:
+                    if not i == (nextx, nexty):
+                        cornersState.append(i) #to update the successors corner state tuple
+                successors.append( ( ((nextx, nexty), tuple(cornersState)), action, 1) ) #(positionCoord, (corner1, corner2, corner3))
         self._expanded += 1 # DO NOT CHANGE
         return successors
 
