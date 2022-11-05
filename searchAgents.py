@@ -33,7 +33,7 @@ description for details.
 
 Good luck and happy searching!
 """
-
+import math
 from typing import List, Tuple, Any
 from game import Directions
 from game import Agent
@@ -376,7 +376,9 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     "*** YOUR CODE HERE ***"
     score = 0
     if len(state[1]) > 0:
-        score = abs(state[0][0] - state[1][0][0]) + abs(state[0][1] - state[1][0][1])
+        #score = abs(state[0][0] - state[1][0][0]) + abs(state[0][1] - state[1][0][1])
+        #score = max(abs(state[0][0] - state[1][0][0]),abs(state[0][1] - state[1][0][1]))
+        score = math.sqrt(((state[0][0] - state[1][0][0])**2) + ((state[0][1] - state[1][0][1])**2))
     else:
         score = 0
     return score # Default to trivial solution
