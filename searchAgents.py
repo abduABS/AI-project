@@ -375,10 +375,15 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
 
     "*** YOUR CODE HERE ***"
     score = 0
-    if len(state[1]) > 0:
-        #score = abs(state[0][0] - state[1][0][0]) + abs(state[0][1] - state[1][0][1])
-        #score = max(abs(state[0][0] - state[1][0][0]),abs(state[0][1] - state[1][0][1]))
-        score = math.sqrt(((state[0][0] - state[1][0][0])**2) + ((state[0][1] - state[1][0][1])**2))
+    pos = state[0]
+    corners = state[1]
+
+    if len(state[1]) > 0 and pos != (w for w in walls):
+        score = util.manhattanDistance(pos, corners[0])
+        for c in corners:
+            if(util.manhattanDistance(pos, c) > score):
+                score = util.manhattanDistance(pos, c)
+
     else:
         score = 0
     return score # Default to trivial solution
